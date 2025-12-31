@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ПІ-мп51: Статистика 2025</title>
+    <title>ПІ-мп51: Wrapped 2025</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -103,24 +103,24 @@
         };
 
         const PodiumStep = ({ user, place, height, color, borderColor, isWinner }) => (
-            <div className={`flex flex-col items-center w-full relative transition-all duration-700 ${isWinner ? 'z-10' : 'z-0'}`}>
-                <div className="h-20 md:h-28 flex items-end justify-center mb-4">
+            <div className={`flex flex-col items-center w-full min-w-0 relative transition-all duration-700 ${isWinner ? 'z-10' : 'z-0'}`}>
+                <div className="h-16 md:h-28 flex items-end justify-center mb-3">
                     {isWinner && (
                         <div className="animate-bounce">
-                            <Icons.Award size={64} className="text-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.8)]" />
+                            <Icons.Award size={48} className="md:size-[64px] text-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.8)]" />
                         </div>
                     )}
                 </div>
                 
-                <div className="mb-6 text-center px-1 w-full overflow-hidden">
-                    <div className={`text-sm md:text-xl font-bold mb-2 truncate px-4 ${isWinner ? 'text-yellow-400' : 'text-slate-300'}`}>
+                <div className="mb-4 text-center px-1 w-full overflow-hidden">
+                    <div className={`text-[10px] sm:text-xs md:text-xl font-bold mb-1 truncate px-1 ${isWinner ? 'text-yellow-400' : 'text-slate-300'}`}>
                         {user.username}
                     </div>
-                    <div className="text-2xl md:text-4xl font-black text-white leading-none">{user.count}</div>
+                    <div className="text-lg md:text-4xl font-black text-white leading-none tracking-tighter">{user.count}</div>
                 </div>
                 
-                <div className={`w-full ${height} ${color} border-t-8 ${borderColor} rounded-t-[3rem] flex items-start justify-center pt-8 relative group hover:brightness-125 transition-all podium-shadow`}>
-                    <span className="text-6xl md:text-9xl font-black opacity-10 group-hover:opacity-25 transition-opacity text-white select-none">
+                <div className={`w-full ${height} ${color} border-t-4 md:border-t-8 ${borderColor} rounded-t-2xl md:rounded-t-[3rem] flex items-start justify-center pt-6 relative group hover:brightness-125 transition-all podium-shadow`}>
+                    <span className="text-4xl md:text-9xl font-black opacity-10 group-hover:opacity-25 transition-opacity text-white select-none">
                         {place}
                     </span>
                 </div>
@@ -165,7 +165,7 @@
                         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 blur-[160px] rounded-full"></div>
                     </div>
 
-                    <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-32 animate-fade-in">
+                    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-32 animate-fade-in">
                         {/* Header Section */}
                         <header className="text-center mb-24 md:mb-40">
                             <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full glass border-blue-500/20 text-blue-400 text-sm md:text-base font-bold mb-10 tracking-[0.3em] uppercase shadow-lg shadow-blue-500/5">
@@ -173,18 +173,18 @@
                                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                   <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
                                 </span>
-                                Статистика 2025
+                                Wrapped 2025
                             </div>
-                            <h1 className="text-7xl md:text-9xl 2xl:text-[11rem] font-extrabold mb-10 tracking-tighter gradient-text leading-[0.9]">
+                            <h1 className="text-5xl sm:text-7xl md:text-9xl 2xl:text-[11rem] font-extrabold mb-10 tracking-tighter gradient-text leading-[0.9]">
                                 {chatName}
                             </h1>
-                            <p className="text-slate-400 text-xl md:text-3xl font-medium max-w-3xl mx-auto leading-relaxed opacity-80">
+                            <p className="text-slate-400 text-lg md:text-3xl font-medium max-w-3xl mx-auto leading-relaxed opacity-80">
                                 Рік у цифрах: як ми спілкувалися, <br className="hidden md:block" /> створювали та навчалися разом.
                             </p>
                         </header>
 
                         {/* Large Stats Grid */}
-                        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 mb-32 md:mb-56">
+                        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10 mb-32 md:mb-56">
                             <StatCard iconName="MessageSquare" label="Повідомлень" value={totalMessages.toLocaleString()} sub="Масштаб розмови" colorClass="text-blue-400" />
                             <StatCard iconName="Users" label="Учасників" value={memberCount} sub="Наша команда" colorClass="text-purple-400" />
                             <StatCard iconName="Calendar" label="Днів чату" value={diffDays} sub="Шлях довжиною в рік" colorClass="text-pink-400" />
@@ -193,54 +193,56 @@
 
                         {/* Grand Podium */}
                         <section className="mb-32 md:mb-64">
-                            <div className="text-center mb-20 md:mb-28">
-                                <h2 className="text-4xl md:text-6xl font-extrabold flex items-center justify-center gap-6 text-white tracking-tight">
-                                    <Icons.Trophy className="text-yellow-400 scale-150" size={40} /> 
+                            <div className="text-center mb-16 md:mb-28">
+                                <h2 className="text-2xl md:text-6xl font-extrabold flex items-center justify-center gap-4 text-white tracking-tight">
+                                    <Icons.Trophy className="text-yellow-400 scale-125 md:scale-150" size={32} /> 
                                     Топ лідерів року
                                 </h2>
                             </div>
                             
-                            <div className="flex items-end justify-center max-w-5xl mx-auto gap-3 md:gap-10 px-4">
-                                <PodiumStep user={top5[1]} place={2} height="h-56 md:h-80" color="bg-slate-500/10" borderColor="border-slate-500/30" />
-                                <PodiumStep user={top5[0]} place={1} height="h-80 md:h-[32rem]" color="bg-yellow-500/10" borderColor="border-yellow-500/40" isWinner />
-                                <PodiumStep user={top5[2]} place={3} height="h-44 md:h-64" color="bg-orange-500/10" borderColor="border-orange-500/30" />
+                            <div className="flex items-end justify-center max-w-5xl mx-auto gap-2 md:gap-10">
+                                <PodiumStep user={top5[1]} place={2} height="h-40 md:h-80" color="bg-slate-500/10" borderColor="border-slate-500/30" />
+                                <PodiumStep user={top5[0]} place={1} height="h-56 md:h-[32rem]" color="bg-yellow-500/10" borderColor="border-yellow-500/40" isWinner />
+                                <PodiumStep user={top5[2]} place={3} height="h-32 md:h-64" color="bg-orange-500/10" borderColor="border-orange-500/30" />
                             </div>
                         </section>
 
                         {/* Enhanced Full List */}
-                        <section className="max-w-4xl mx-auto mb-32 md:mb-48">
-                            <div className="glass rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-2xl">
-                                <div className="p-10 md:p-14 border-b border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 bg-white/[0.01]">
-                                    <h3 className="text-2xl md:text-3xl font-bold flex items-center gap-4 text-white">
-                                        <Icons.Hash size={28} className="text-blue-400" /> Повний рейтинг активності
+                        <section className="max-w-4xl mx-auto mb-32 md:mb-48 px-2">
+                            <div className="glass rounded-[2rem] md:rounded-[4rem] overflow-hidden shadow-2xl">
+                                <div className="p-8 md:p-14 border-b border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 bg-white/[0.01]">
+                                    <h3 className="text-xl md:text-3xl font-bold flex items-center gap-4 text-white">
+                                        <Icons.Hash size={24} className="text-blue-400 md:size-[28px]" /> Рейтинг активності
                                     </h3>
-                                    <div className="px-6 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest">
+                                    <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] md:text-sm font-bold text-slate-400 uppercase tracking-widest">
                                         {totalMessages} ПОВІДОМЛЕНЬ
                                     </div>
                                 </div>
                                 <div className="divide-y divide-white/5">
                                     {data.map((item, index) => (
-                                        <div key={item.username} className={`p-6 md:p-10 flex items-center justify-between group transition-all duration-500 hover:bg-white/[0.03]`}>
-                                            <div className="flex items-center gap-6 md:gap-10 min-w-0">
-                                                <span className={`text-xl md:text-2xl font-black w-8 shrink-0 ${index < 3 ? 'text-blue-400' : 'text-slate-600'}`}>
+                                        <div key={item.username} className={`p-5 md:p-10 flex items-center justify-between group transition-all duration-500 hover:bg-white/[0.03]`}>
+                                            <div className="flex items-center gap-4 md:gap-10 min-w-0 flex-1">
+                                                <span className={`text-base md:text-2xl font-black w-6 md:w-8 shrink-0 ${index < 3 ? 'text-blue-400' : 'text-slate-600'}`}>
                                                     {String(index + 1).padStart(2, '0')}
                                                 </span>
-                                                <div className="flex flex-col">
-                                                    <span className={`text-lg md:text-2xl truncate transition-all ${index < 3 ? 'font-bold text-slate-100 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-200'}`}>
-                                                        {item.username}
-                                                    </span>
-                                                    {index < 3 && <span className="text-[10px] md:text-xs text-blue-500/60 font-bold uppercase tracking-tighter mt-1">Elite Member</span>}
+                                                <div className="flex flex-col min-w-0 pr-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className={`text-sm md:text-2xl truncate transition-all ${index < 3 ? 'font-bold text-slate-100 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                                            {item.username}
+                                                        </span>
+                                                        {index === 0 && <Icons.Award size={16} className="text-yellow-400 md:size-[24px] shrink-0 animate-pulse" />}
+                                                    </div>
+                                                    {index < 3 && <span className="text-[8px] md:text-xs text-blue-500/60 font-bold uppercase tracking-tight mt-0.5">Elite Member</span>}
                                                 </div>
-                                                {index === 0 && <Icons.Award size={24} className="text-yellow-400 shrink-0 animate-pulse" />}
                                             </div>
-                                            <div className="flex items-center gap-8 shrink-0">
+                                            <div className="flex items-center gap-4 md:gap-8 shrink-0">
                                                 <div className="hidden lg:block w-48 2xl:w-64 bg-white/5 h-3 rounded-full overflow-hidden">
                                                     <div 
                                                         className={`h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)] ${index < 3 ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-slate-700'}`}
                                                         style={{ width: `${(item.count / top5[0].count) * 100}%` }}
                                                     />
                                                 </div>
-                                                <span className="text-xl md:text-3xl font-black text-slate-100 min-w-[4rem] text-right tracking-tighter">
+                                                <span className="text-base md:text-3xl font-black text-slate-100 w-12 md:w-auto text-right tracking-tighter shrink-0">
                                                     {item.count}
                                                 </span>
                                             </div>
@@ -251,13 +253,13 @@
                         </section>
 
                         {/* Grand Footer */}
-                        <footer className="text-center py-20 border-t border-white/5">
-                            <p className="text-slate-500 text-lg md:text-xl font-medium leading-relaxed italic opacity-60">
-                                "ПІ-мп51 — вижили не всі!!!, <br className="hidden md:block" /> "
+                        <footer className="text-center py-20 border-t border-white/5 px-4">
+                            <p className="text-slate-500 text-sm md:text-xl font-medium leading-relaxed italic opacity-60">
+                                "ПІ-мп51 — це не просто чат, це сотні годин підтримки, <br className="hidden md:block" /> знань та справжнього драйву."
                             </p>
                             <div className="mt-12 flex flex-col items-center gap-4">
-                                <div className="h-px w-24 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
-                                <span className="text-slate-700 text-sm tracking-[0.5em] uppercase font-bold">Created for 2025 Archive</span>
+                                <div className="h-px w-16 md:w-24 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
+                                <span className="text-slate-700 text-[10px] md:text-sm tracking-[0.5em] uppercase font-bold text-center">Created for 2025 Archive</span>
                             </div>
                         </footer>
                     </div>
