@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ПІ-мп51: Статистика 2025</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            color: #f8fafc;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .podium-shadow {
+            box-shadow: 0 -20px 80px -20px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const Icons = {
+            MessageSquare: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            ),
+            Users: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            ),
+            Calendar: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+            ),
+            Trophy: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                </svg>
+            ),
+            TrendingUp: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                </svg>
+            ),
+            Award: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+                </svg>
+            ),
+            Hash: ({ size = 24, className = "" }) => (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>
+                </svg>
+            )
+        };
+
+        const StatCard = ({ iconName, label, value, sub, colorClass }) => {
+            const Icon = Icons[iconName];
+            return (
+                <div className="glass p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] hover:bg-white/5 transition-all duration-500 group">
+                    <div className={`mb-6 p-4 md:p-6 rounded-3xl bg-white/5 inline-block transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 ${colorClass}`}>
+                        <Icon size={32} />
+                    </div>
+                    <div className="text-3xl md:text-5xl font-extrabold text-white tracking-tighter">{value}</div>
+                    <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500 mt-2">{label}</div>
+                    <div className="text-xs text-slate-600 mt-3 font-medium opacity-80">{sub}</div>
+                </div>
+            );
+        };
+
+        const PodiumStep = ({ user, place, height, color, borderColor, isWinner }) => (
+            <div className={`flex flex-col items-center w-full relative transition-all duration-700 ${isWinner ? 'z-10' : 'z-0'}`}>
+                <div className="h-20 md:h-28 flex items-end justify-center mb-4">
+                    {isWinner && (
+                        <div className="animate-bounce">
+                            <Icons.Award size={64} className="text-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.8)]" />
+                        </div>
+                    )}
+                </div>
+                
+                <div className="mb-6 text-center px-1 w-full overflow-hidden">
+                    <div className={`text-sm md:text-xl font-bold mb-2 truncate px-4 ${isWinner ? 'text-yellow-400' : 'text-slate-300'}`}>
+                        {user.username}
+                    </div>
+                    <div className="text-2xl md:text-4xl font-black text-white leading-none">{user.count}</div>
+                </div>
+                
+                <div className={`w-full ${height} ${color} border-t-8 ${borderColor} rounded-t-[3rem] flex items-start justify-center pt-8 relative group hover:brightness-125 transition-all podium-shadow`}>
+                    <span className="text-6xl md:text-9xl font-black opacity-10 group-hover:opacity-25 transition-opacity text-white select-none">
+                        {place}
+                    </span>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const chatName = "ПІ-мп51";
+            const startDate = new Date('2025-08-29');
+            const totalMessages = 2792;
+            const memberCount = 16;
+            const today = new Date('2025-12-31');
+            const diffDays = Math.ceil(Math.abs(today - startDate) / (1000 * 60 * 60 * 24));
+            const avgMessagesPerDay = (totalMessages / diffDays).toFixed(1);
+
+            const data = [
+                { username: "@Oleksandr_OsG", count: 747 },
+                { username: "@Vanyok020403", count: 657 },
+                { username: "@apolinaria_02", count: 512 },
+                { username: "@georgii1230", count: 206 },
+                { username: "@anzhIIa", count: 190 },
+                { username: "@Nazariy1136", count: 179 },
+                { username: "@taxotestbot", count: 63 },
+                { username: "@Greench_art", count: 37 },
+                { username: "@Ivan_Bogdann", count: 35 },
+                { username: "@ubldk", count: 32 },
+                { username: "@TheMysteriousA_SwimAR", count: 28 },
+                { username: "@metrologrisa", count: 9 },
+                { username: "@ssidxpav", count: 7 },
+                { username: "@KamelAvad", count: 6 },
+                { username: "@Sergii03", count: 5 },
+                { username: "@ProjectOfWar", count: 5 }
+            ];
+
+            const top5 = data.slice(0, 5);
+
+            return (
+                <div className="min-h-screen selection:bg-blue-500/30 overflow-x-hidden">
+                    {/* Background Glows */}
+                    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 blur-[160px] rounded-full"></div>
+                        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 blur-[160px] rounded-full"></div>
+                    </div>
+
+                    <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-32 animate-fade-in">
+                        {/* Header Section */}
+                        <header className="text-center mb-24 md:mb-40">
+                            <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full glass border-blue-500/20 text-blue-400 text-sm md:text-base font-bold mb-10 tracking-[0.3em] uppercase shadow-lg shadow-blue-500/5">
+                                <span className="relative flex h-3 w-3">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                                </span>
+                                Статистика 2025
+                            </div>
+                            <h1 className="text-7xl md:text-9xl 2xl:text-[11rem] font-extrabold mb-10 tracking-tighter gradient-text leading-[0.9]">
+                                {chatName}
+                            </h1>
+                            <p className="text-slate-400 text-xl md:text-3xl font-medium max-w-3xl mx-auto leading-relaxed opacity-80">
+                                Рік у цифрах: як ми спілкувалися, <br className="hidden md:block" /> створювали та навчалися разом.
+                            </p>
+                        </header>
+
+                        {/* Large Stats Grid */}
+                        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 mb-32 md:mb-56">
+                            <StatCard iconName="MessageSquare" label="Повідомлень" value={totalMessages.toLocaleString()} sub="Масштаб розмови" colorClass="text-blue-400" />
+                            <StatCard iconName="Users" label="Учасників" value={memberCount} sub="Наша команда" colorClass="text-purple-400" />
+                            <StatCard iconName="Calendar" label="Днів чату" value={diffDays} sub="Шлях довжиною в рік" colorClass="text-pink-400" />
+                            <StatCard iconName="TrendingUp" label="Повід./день" value={avgMessagesPerDay} sub="Інтенсивність" colorClass="text-emerald-400" />
+                        </section>
+
+                        {/* Grand Podium */}
+                        <section className="mb-32 md:mb-64">
+                            <div className="text-center mb-20 md:mb-28">
+                                <h2 className="text-4xl md:text-6xl font-extrabold flex items-center justify-center gap-6 text-white tracking-tight">
+                                    <Icons.Trophy className="text-yellow-400 scale-150" size={40} /> 
+                                    Топ лідерів року
+                                </h2>
+                            </div>
+                            
+                            <div className="flex items-end justify-center max-w-5xl mx-auto gap-3 md:gap-10 px-4">
+                                <PodiumStep user={top5[1]} place={2} height="h-56 md:h-80" color="bg-slate-500/10" borderColor="border-slate-500/30" />
+                                <PodiumStep user={top5[0]} place={1} height="h-80 md:h-[32rem]" color="bg-yellow-500/10" borderColor="border-yellow-500/40" isWinner />
+                                <PodiumStep user={top5[2]} place={3} height="h-44 md:h-64" color="bg-orange-500/10" borderColor="border-orange-500/30" />
+                            </div>
+                        </section>
+
+                        {/* Enhanced Full List */}
+                        <section className="max-w-4xl mx-auto mb-32 md:mb-48">
+                            <div className="glass rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-2xl">
+                                <div className="p-10 md:p-14 border-b border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 bg-white/[0.01]">
+                                    <h3 className="text-2xl md:text-3xl font-bold flex items-center gap-4 text-white">
+                                        <Icons.Hash size={28} className="text-blue-400" /> Повний рейтинг активності
+                                    </h3>
+                                    <div className="px-6 py-2 rounded-2xl bg-white/5 border border-white/10 text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest">
+                                        {totalMessages} ПОВІДОМЛЕНЬ
+                                    </div>
+                                </div>
+                                <div className="divide-y divide-white/5">
+                                    {data.map((item, index) => (
+                                        <div key={item.username} className={`p-6 md:p-10 flex items-center justify-between group transition-all duration-500 hover:bg-white/[0.03]`}>
+                                            <div className="flex items-center gap-6 md:gap-10 min-w-0">
+                                                <span className={`text-xl md:text-2xl font-black w-8 shrink-0 ${index < 3 ? 'text-blue-400' : 'text-slate-600'}`}>
+                                                    {String(index + 1).padStart(2, '0')}
+                                                </span>
+                                                <div className="flex flex-col">
+                                                    <span className={`text-lg md:text-2xl truncate transition-all ${index < 3 ? 'font-bold text-slate-100 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                                        {item.username}
+                                                    </span>
+                                                    {index < 3 && <span className="text-[10px] md:text-xs text-blue-500/60 font-bold uppercase tracking-tighter mt-1">Elite Member</span>}
+                                                </div>
+                                                {index === 0 && <Icons.Award size={24} className="text-yellow-400 shrink-0 animate-pulse" />}
+                                            </div>
+                                            <div className="flex items-center gap-8 shrink-0">
+                                                <div className="hidden lg:block w-48 2xl:w-64 bg-white/5 h-3 rounded-full overflow-hidden">
+                                                    <div 
+                                                        className={`h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(59,130,246,0.5)] ${index < 3 ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-slate-700'}`}
+                                                        style={{ width: `${(item.count / top5[0].count) * 100}%` }}
+                                                    />
+                                                </div>
+                                                <span className="text-xl md:text-3xl font-black text-slate-100 min-w-[4rem] text-right tracking-tighter">
+                                                    {item.count}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Grand Footer */}
+                        <footer className="text-center py-20 border-t border-white/5">
+                            <p className="text-slate-500 text-lg md:text-xl font-medium leading-relaxed italic opacity-60">
+                                "ПІ-мп51 — вижили не всі!!!, <br className="hidden md:block" /> "
+                            </p>
+                            <div className="mt-12 flex flex-col items-center gap-4">
+                                <div className="h-px w-24 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
+                                <span className="text-slate-700 text-sm tracking-[0.5em] uppercase font-bold">Created for 2025 Archive</span>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
